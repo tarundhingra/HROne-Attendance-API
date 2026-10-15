@@ -1,5 +1,3 @@
-# DECISIONS.md  (about 150-200 words in total - plain language, your own words)
-
 # DECISIONS.md
 
 1. **Indexes:** I created a unique compound index on `attendance_logs(emp_code, date)` to enforce uniqueness and support the monthly/trend aggregations. I created `attendance_logs(date, emp_code)` for the paginated attendance list sort, `attendance_logs(status)` for filtering, and `employees(emp_code)` (unique) + `employees(department)`. I considered a text index on `reason`, but rejected it as the contract doesn't require text search.
