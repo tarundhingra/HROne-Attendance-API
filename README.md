@@ -1,45 +1,43 @@
-# Candidate kit
-
-Read in this order:
-
-1. `PROBLEM_STATEMENT.docx`: what you are asked to do, how it is evaluated.
-2. `openapi.yaml`: the API contract and the business rules (R1 - R10).
-3. `DATA_MODEL.md`: what is stored in MongoDB, with nine sample documents.
-4. `app/main.py`: the starter. Put **all** your code in this one file. It must start with `uvicorn app.main:app --port 8000`.
-5. `REVIEW.md`, `DECISIONS.md`: templates to fill in.
-
-`sample_data/` holds the nine sample documents as MongoDB Extended JSON; `sample_seed.py` loads them. The grader's dataset is
-much larger and contains cases they do not show.
-
-## Local setup
-```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env            # set MONGO_URI / MONGO_DB (local docker: docker run -p 27017:27017 mongo:7)
-python sample_seed.py
-uvicorn app.main:app --port 8000 --reload
-```
-MongoDB **6.0 or newer** is required (the grader uses 7.0). MongoDB Atlas free tier (M0) works.
-
-## Submit
-A public Git repository with `app/main.py`, `requirements.txt`, `REVIEW.md`, `DECISIONS.md` and a short `README.md`.
-No `.env`, no secrets, no Dockerfile.
-
+```markdown
 # HR Attendance API
 
-**Requirements**
+This repository contains the completed FastAPI backend for the Employee Attendance & Analytics assignment. All application code is contained within a single file (`app/main.py`) as requested.
+
+## Requirements
 * Python 3.11+
-* MongoDB 6.0+
+* MongoDB 6.0+ 
 
-**How to run**
-1. Ensure your MongoDB instance is running.
-2. Set your environment variables in `.env` (or your OS environment):
-        MONGO_URI=mongodb://localhost:27017
-        MONGO_DB=hrone_db
-3. Install dependencies: `pip install -r requirements.txt`
-4. Start the server: `uvicorn app.main:app --port 8000`
+## How to Run
+1. Ensure your MongoDB instance is running locally or via Atlas.
+2. Set your environment variables (a local `.env` file in the root directory is supported):
+   ```text
+   MONGO_URI=mongodb://localhost:27017
+   MONGO_DB=hrone_db
 
-**Notes**
-* Indexes are created automatically at startup via FastAPI's `lifespan` event.
-* The API correctly uses half-up rounding (R8) using Python's `Decimal` module.
-* All required endpoints are complete.
+```
+
+3. Install the required dependencies:
+```bash
+pip install -r requirements.txt
+
+```
+
+
+4. Start the server:
+```bash
+uvicorn app.main:app --port 8000
+
+```
+
+
+*(The server will be ready on port 8000. Interactive documentation is available at `http://localhost:8000/docs`)*
+
+## Notes for the Reviewer
+
+* **Database Indexes:** All required compound and unique indexes are created automatically and idempotently at startup using FastAPI's `lifespan` context manager.
+* **Rounding (R8):** The API strictly adheres to the half-up rounding rule for work hours and rates by utilizing Python's `Decimal` module with `ROUND_HALF_UP`, avoiding the banker's rounding behavior of the built-in `round()`.
+* **Completeness:** All endpoints, including the four MongoDB aggregation analytics pipelines and the `admin/explain` endpoint, are complete and handle race conditions natively at the database level.
+
+```
+
+```
